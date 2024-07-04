@@ -36,7 +36,7 @@ import javax.net.ssl.SSLContext
 
 object HaapiConfigurationUtil {
 
-    fun createConfiguration(conf: HashMap<String, Any>, reactContext: ReactApplicationContext) = HaapiConfiguration(
+    fun createConfiguration(conf: Map<String, Any>, reactContext: ReactApplicationContext) = HaapiConfiguration(
         keyStoreAlias = asStringOrDefault(
             conf, "keyStoreAlias", "haapi-react-native-android"
         ),
@@ -73,7 +73,7 @@ object HaapiConfigurationUtil {
         tokenBoundConfiguration = createTokenBoundConfiguration(reactContext)
     )
 
-    fun addFallbackConfiguration(accessorFactory: HaapiAccessorFactory, conf: HashMap<String, Any>, context: Context) {
+    fun addFallbackConfiguration(accessorFactory: HaapiAccessorFactory, conf: Map<String, Any>, context: Context) {
         val registrationEndpoint = asOptionalUri(conf, "registrationEndpointUri") ?: return
         val fallbackTemplate = asStringOrThrow(conf, "fallback_template_id")
         val registrationClientSecret = asStringOrThrow(conf, "registration_secret")
@@ -94,15 +94,15 @@ object HaapiConfigurationUtil {
         currentTimeMillisProvider = { System.currentTimeMillis() }
     )
 
-    private fun asStringOrDefault(conf: HashMap<String, Any>, parameter: String, defaultValue: String): String =
+    private fun asStringOrDefault(conf: Map<String, Any>, parameter: String, defaultValue: String): String =
         asOptionalString(conf, parameter) ?: defaultValue
 
-    private fun asStringOrThrow(conf: HashMap<String, Any>, parameter: String): String =
+    private fun asStringOrThrow(conf: Map<String, Any>, parameter: String): String =
         asOptionalString(conf, parameter) ?: throw RuntimeException("Missing $parameter in configuration")
 
-    private fun asOptionalString(conf: HashMap<String, Any>, parameter: String): String? = conf[parameter] as? String?
+    private fun asOptionalString(conf: Map<String, Any>, parameter: String): String? = conf[parameter] as? String?
 
-    private fun asOptionalUri(conf: HashMap<String, Any>, parameter: String): URI? {
+    private fun asOptionalUri(conf: Map<String, Any>, parameter: String): URI? {
         val optionalValue = asOptionalString(conf, parameter)
         return if (optionalValue != null) URI(optionalValue) else null
     }
